@@ -15,7 +15,7 @@ import { FiPhoneCall, FiEdit3, FiUpload } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
 import { companies, jobs } from "../utills/data";
 import { CustomButton, JobCard, Loading, TextInput } from "../components";
-import { apiRequest,handleFileUpload } from "../utills";
+import { apiRequest, handleFileUpload } from "../utills";
 import { Login } from "../redux/userSlice";
 
 const CompnayForm = ({ open, setOpen }) => {
@@ -35,8 +35,7 @@ const CompnayForm = ({ open, setOpen }) => {
   const [profileImage, setProfileImage] = useState("");
   const [uploadCv, setUploadCv] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [errMsg, setErrMsg] = useState({ status: false }); 
- 
+  const [errMsg, setErrMsg] = useState({ status: false });
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -58,11 +57,13 @@ const CompnayForm = ({ open, setOpen }) => {
       if (res.status === "failed") {
         setErrMsg({ ...res });
       } else {
-        setErrMsg({ status: "success", message: res.message }); 
-           const userData = { token: res.token, ...res.user };
-        dispatch(Login(userData)); // Ensure newData is passed here
+        setErrMsg({ status: "success", message: res.message });
+        const userData = { token: res.token, ...res.user };
+        dispatch(Login(userData)); 
         localStorage.setItem("userInfo", JSON.stringify(newData));
-       
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
     } catch (error) {
       console.log(error);
@@ -235,10 +236,10 @@ const Companyprofile = () => {
   if (isLoading) {
     return <Loading />;
   }
-    if (!info) {
-      return <div>Loading company information...</div>;
-    }
- console.log(info?.profileUrl);
+  if (!info) {
+    return <div>Loading company information...</div>;
+  }
+  console.log(info?.profileUrl);
   return (
     <div className="container mx-auto p-5">
       <div className="">
@@ -246,7 +247,7 @@ const Companyprofile = () => {
           <h2 className="text-gray-600 text-xl font-semibold">
             Welcome, {info?.name}
           </h2>
-         
+
           {user?.user?.accountType === undefined && info._id === user?._id && (
             <div className="flex items-center justifu-center py-5 md:py-0 gap-4">
               <CustomButton
@@ -291,7 +292,7 @@ const Companyprofile = () => {
           {info?.jobPosts.map((job, index) => {
             const data = {
               name: info?.name,
-              email: info?.email, 
+              email: info?.email,
               logo: info?.profileUrl,
               ...job,
             };
@@ -299,7 +300,7 @@ const Companyprofile = () => {
           })}
         </div>
       </div>
-      
+
       <CompnayForm open={openForm} setOpen={setOpenForm} />
     </div>
   );
