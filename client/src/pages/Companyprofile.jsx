@@ -62,9 +62,7 @@ const CompnayForm = ({ open, setOpen }) => {
            const userData = { token: res.token, ...res.user };
         dispatch(Login(userData)); // Ensure newData is passed here
         localStorage.setItem("userInfo", JSON.stringify(newData));
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
+       
       }
     } catch (error) {
       console.log(error);
