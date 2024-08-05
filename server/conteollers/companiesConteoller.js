@@ -21,9 +21,11 @@ export const register = async (req, res, next) => {
   try {
     const accountExist = await Companies.findOne({ email });
 
-    if (accountExist) {
-      return next(new Error("Email already registered, please login"));
-    }
+      if (accountExist) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Email Address already exists" });
+      }
 
     // Create a new company account
     const company = await Companies.create({

@@ -7,7 +7,7 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { useForm } from "react-hook-form";
-import { json, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import TextInput from "./TextInput";
 import CustomButton from "./CustomButton";
@@ -20,54 +20,51 @@ const SignUp = ({ open, setOpen }) => {
 
   const [isRegister, setIsRegister] = useState(true);
   const [accountType, setAccountType] = useState("seeker");
-
   const [errMsg, setErrMsg] = useState("");
 
   const {
     register,
     handleSubmit,
     getValues,
-    watch,
     formState: { errors },
   } = useForm({
     mode: "onChange",
   });
 
-  let form = location.state?.from?.pathname || "/";
-
   const closeModal = () => setOpen(false);
 
-   const onSubmit = async (data) => {
-     let URL = isRegister
-       ? accountType === "seeker"
-         ? "/auth/register"
-         : "/companies/register"
-       : accountType === "seeker"
-       ? "/auth/login"
-       : "/companies/login";
+const onSubmit = async (data) => {
+  let URL = isRegister
+    ? accountType === "seeker"
+      ? "/auth/register"
+      : "/companies/register"
+    : accountType === "seeker"
+    ? "/auth/login"
+    : "/companies/login";
 
-     try {
-       const res = await apiRequest({
-         url: URL,
-         data: data,
-         method: "POST",
-       });
+  try {
+    const res = await apiRequest({
+      url: URL,
+      data: data,
+      method: "POST",
+    });
 
-       if (res.status === "failed") {
-         setErrMsg(res.message);
-       } else {
-         setErrMsg("");
-         const userData = { token: res.token, ...res.user };
-         dispatch(Login(userData));
-         localStorage.setItem("userInfo", JSON.stringify(userData));
-         const redirectPath = location?.state?.from?.pathname || "/";
-         window.location.replace(redirectPath);
-       }
-     } catch (error) {
-       setErrMsg("An error occurred. Please try again.");
-       console.log(error);
-     }
-   };
+    if (res.status === "failed") {
+      setErrMsg(res.message);
+    } else {
+      setErrMsg("");
+      const userData = { token: res.token, ...res.user };
+      dispatch(Login(userData));
+      localStorage.setItem("userInfo", JSON.stringify(userData));
+      const redirectPath = location?.state?.from?.pathname || "/";
+      window.location.replace(redirectPath);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    setErrMsg("An error occurred. Please try again.");
+  }
+};
+
 
   return (
     <>
@@ -96,12 +93,12 @@ const SignUp = ({ open, setOpen }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-alll">
+                <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <DialogTitle
                     as="h3"
-                    className="text-xl font-semibold lwading-6 text-gray-900"
+                    className="text-xl font-semibold leading-6 text-gray-900"
                   >
-                    {isRegister ? "Create Account" : "Account sign In"}
+                    {isRegister ? "Create Account" : "Account Sign In"}
                   </DialogTitle>
                   <div className="w-full flex items-center justify-center py-4 ">
                     <button
@@ -224,8 +221,8 @@ const SignUp = ({ open, setOpen }) => {
                               validate: (value) => {
                                 const { password } = getValues();
 
-                                if (password != value) {
-                                  return "Passwords do no match";
+                                if (password !== value) {
+                                  return "Passwords do not match";
                                 }
                               },
                             })}
@@ -244,7 +241,9 @@ const SignUp = ({ open, setOpen }) => {
                         role="alert"
                         className="text-sm text-red-500 mt-0.5"
                       >
-                        {errMsg}
+                        {typeof errMsg === "object"
+                          ? JSON.stringify(errMsg)
+                          : errMsg}
                       </span>
                     )}
                     <div className="mt-2">
@@ -258,8 +257,8 @@ const SignUp = ({ open, setOpen }) => {
                   <div className="mt-4">
                     <p className="text-sm text-gray-700">
                       {isRegister
-                        ? "Already has a account?"
-                        : "Do not have an account?"}
+                        ? "Already have an account?"
+                        : "Don't have an account?"}
                       <span
                         className="text-sm text-blue-600 ml-2 hover:font-semibold cursor-pointer"
                         onClick={() => {
@@ -279,4 +278,5 @@ const SignUp = ({ open, setOpen }) => {
     </>
   );
 };
+
 export default SignUp;

@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "https://saproject.onrender.com/api-v1/";
+const API_URL = "http://localhost:8080/api-v1/";
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -16,10 +16,19 @@ export const apiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    return result.data; // Ensure the response data is returned
+    return result.data;
   } catch (error) {
-    console.log(error);
-    return { status: "failed", message: error.message }; // Return error details
+    console.error("API Error:", error);
+    // Handle and return detailed error information
+    if (error.response) {
+      return {
+        status: "failed",
+        message: error.response.data.message || "An error occurred",
+        statusCode: error.response.status,
+      };
+    } else {
+      return { status: "failed", message: error.message };
+    }
   }
 };
 
@@ -33,7 +42,7 @@ export const handleFileUpload = async (uploadFile) => {
       "https://api.cloudinary.com/v1_1/dnohgikvp/image/upload",
       formData
     );
-    return response.data.secure_url; // Return the URL of the uploaded image
+    return response.data.secure_url; 
   } catch (error) {
     console.log(error);
     throw new Error("Image upload failed");
