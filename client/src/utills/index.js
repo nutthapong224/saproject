@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://localhost:8080/api-v1/";
+const API_URL = "https://saproject.onrender.com/api-v1/";
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -42,7 +42,7 @@ export const handleFileUpload = async (uploadFile) => {
       "https://api.cloudinary.com/v1_1/dnohgikvp/image/upload",
       formData
     );
-    return response.data.secure_url; 
+    return response.data.secure_url;
   } catch (error) {
     console.log(error);
     throw new Error("Image upload failed");
