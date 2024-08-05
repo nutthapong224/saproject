@@ -1,4 +1,29 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/App.jsx",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/static/(.*)", "dest": "/static/$1" },
+    { "src": "/favicon.ico", "dest": "/favicon.ico" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/find-jobs", "dest": "/" },
+    { "src": "/companies", "dest": "/" },
+    { "src": "/user-profile", "dest": "/" },
+    { "src": "/company-profile", "dest": "/" },
+    { "src": "/company-profile/:id", "dest": "/" },
+    { "src": "/upload-job", "dest": "/" },
+    { "src": "/job-detail/:id", "dest": "/" },
+    { "src": "/about-us", "dest": "/" },
+    { "src": "/user-auth", "dest": "/" },
+    { "src": "/", "dest": "/" },
+    { "src": "(.*)", "dest": "/" }
+  ]
 }
