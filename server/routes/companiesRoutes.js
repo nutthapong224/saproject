@@ -1,6 +1,6 @@
 import express from "express"; 
 import rateLimit from "express-rate-limit";
-import { getCompanies, getCompanyByID, getCompanyJobListing, getCompanyProfile, register, signIn,updateCompanyProfile } from "../conteollers/companiesConteoller.js";
+import { getCompanies, getCompanyByID, getCompanyJobListing, getCompanyProfile, register, signIn,updateCompanyProfile,forgotPassword,resetPassword } from "../conteollers/companiesConteoller.js";
 import userAuth from "../middleware/authmiddleware.js";
 
 
@@ -24,6 +24,8 @@ router.post("/login",limiter,signIn);
 router.post("/get-company-profile",userAuth,getCompanyProfile); 
 router.post("/get-company-joblisting",userAuth,getCompanyJobListing);  
 router.get("/",getCompanies); 
+router.post("/forgotPassword",forgotPassword);
+router.post("/resetPassword",resetPassword); 
 router.get("/get-company/:id",getCompanyByID); 
 
 //UPDATE DATA 

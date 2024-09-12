@@ -21,6 +21,7 @@ const userAuth = async (req, res, next) => {
     console.log(error);
     res.status(401).json({ success: false, message: "Authentication failed" });
   }
-};
+}; 
+
 
 export default userAuth;
