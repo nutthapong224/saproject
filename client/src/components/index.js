@@ -10,6 +10,7 @@ import CompanyCard from "./CompanyCard";
 import Loading from "./Loading"; 
 import JobTypess from "./JobTypess";
 
+
 import JobType from "./JobType";
 export {
   Footer,

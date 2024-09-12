@@ -7,7 +7,11 @@ import Findjobs from "./Findjobs";
 import JobDetail from "./JobDetail";
 import Uploadjob from "./Uploadjob";
 import UserProfile from "./UserProfile";
-import NotFound from "./NotFound";
+import NotFound from "./NotFound"; 
+import ForgotPassword from "./ForgotPassword";  
+import ResetPassword from "./ResetPassword";
+import ForgotPasswordCompany from "./ForgotPasswordCompany"; 
+import ResetPasswordCompany from "./ResetPasswordCompany";
 
 export {
   About,
@@ -18,5 +22,9 @@ export {
   JobDetail,
   Uploadjob,
   UserProfile,
-  NotFound,
+  NotFound, 
+  ForgotPassword, 
+  ResetPassword,
+  ForgotPasswordCompany,
+  ResetPasswordCompany
 };

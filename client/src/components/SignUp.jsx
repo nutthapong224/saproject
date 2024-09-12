@@ -7,7 +7,7 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom"; // Import Link
 import { useDispatch } from "react-redux";
 import TextInput from "./TextInput";
 import CustomButton from "./CustomButton";
@@ -18,7 +18,7 @@ const SignUp = ({ open, setOpen }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const [isRegister, setIsRegister] = useState(true);
+  const [isRegister, setIsRegister] = useState(false);
   const [accountType, setAccountType] = useState("seeker");
   const [errMsg, setErrMsg] = useState("");
 
@@ -33,38 +33,37 @@ const SignUp = ({ open, setOpen }) => {
 
   const closeModal = () => setOpen(false);
 
-const onSubmit = async (data) => {
-  let URL = isRegister
-    ? accountType === "seeker"
-      ? "/auth/register"
-      : "/companies/register"
-    : accountType === "seeker"
-    ? "/auth/login"
-    : "/companies/login";
+  const onSubmit = async (data) => {
+    let URL = isRegister
+      ? accountType === "seeker"
+        ? "/auth/register"
+        : "/companies/register"
+      : accountType === "seeker"
+      ? "/auth/login"
+      : "/companies/login";
 
-  try {
-    const res = await apiRequest({
-      url: URL,
-      data: data,
-      method: "POST",
-    });
+    try {
+      const res = await apiRequest({
+        url: URL,
+        data: data,
+        method: "POST",
+      });
 
-    if (res.status === "failed") {
-      setErrMsg(res.message);
-    } else {
-      setErrMsg("");
-      const userData = { token: res.token, ...res.user };
-      dispatch(Login(userData));
-      localStorage.setItem("userInfo", JSON.stringify(userData));
-      const redirectPath = location?.state?.from?.pathname || "/";
-      window.location.replace(redirectPath);
+      if (res.status === "failed") {
+        setErrMsg(res.message);
+      } else {
+        setErrMsg("");
+        const userData = { token: res.token, ...res.user };
+        dispatch(Login(userData));
+        localStorage.setItem("userInfo", JSON.stringify(userData));
+        const redirectPath = location?.state?.from?.pathname || "/";
+        window.location.replace(redirectPath);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setErrMsg("An error occurred. Please try again.");
     }
-  } catch (error) {
-    console.error("Error:", error);
-    setErrMsg("An error occurred. Please try again.");
-  }
-};
-
+  };
 
   return (
     <>
@@ -254,6 +253,22 @@ const onSubmit = async (data) => {
                       />
                     </div>
                   </form>
+                  {!isRegister && (
+                    <div className="mt-4">
+                      <p className="text-sm text-gray-700">
+                        <Link
+                          to={
+                            accountType === "seeker"
+                              ? "/forgotPassword"
+                              : "/forgotPasswordCompany"
+                          }
+                          className="text-sm text-blue-600 hover:font-semibold cursor-pointer"
+                        >
+                          Forgot Password?
+                        </Link>
+                      </p>
+                    </div>
+                  )}
                   <div className="mt-4">
                     <p className="text-sm text-gray-700">
                       {isRegister

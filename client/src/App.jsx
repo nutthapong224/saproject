@@ -10,7 +10,11 @@ import {
   JobDetail,
   Uploadjob,
   UserProfile,  
-  NotFound
+  NotFound, 
+  ForgotPassword, 
+  ResetPassword, 
+  ForgotPasswordCompany,
+  ResetPasswordCompany
   
 } from "./pages";
  
@@ -42,6 +46,7 @@ function App() {
             element={<Navigate to="/find-jobs" replace={true} />}
           />
           <Route path="/find-jobs" element={<Findjobs />} />
+
           <Route path="/companies" element={<Companies />} />
           <Route
             path={
@@ -55,13 +60,18 @@ function App() {
           <Route path={"/company-profile"} element={<Companyprofile />} />
           <Route path={"/company-profile/:id"} element={<Companyprofile />} />
           <Route path={"/upload-job"} element={<Uploadjob />} />
-          <Route path={"/job-detail/:id"} element={<JobDetail />} /> 
-       
+          <Route path={"/job-detail/:id"} element={<JobDetail />} />
         </Route>
 
         <Route path="/about-us" element={<About />} />
         <Route path="/user-auth" element={<Auth />} />
-      
+        <Route path="forgotPassword" element={<ForgotPassword />} />
+        <Route path="resetPassword" element={<ResetPassword />} />
+        <Route
+          path="forgotPasswordCompany"
+          element={<ForgotPasswordCompany />}
+        />
+        <Route path="resetPasswordCompany" element={<ResetPasswordCompany />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {user && <Footer />}

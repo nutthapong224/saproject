@@ -12,22 +12,19 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { AiOutlineClose, AiOutlineLogout } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import CustomButton from "./CustomButton";
-// import { users } from "../utills/data";
 import { useSelector, useDispatch } from "react-redux";
 import { Logout } from "../redux/userSlice";
 import { NoProfile } from "../assets";
+import SignUp from "./SignUp"; // Import SignUp component
 
-function MenuList({ onClick }) { 
-
+function MenuList({ onClick }) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(Logout());
-
   };
 
-    const { user } = useSelector((state) => state.user);
-
+  const { user } = useSelector((state) => state.user);
 
   return (
     <div>
@@ -42,7 +39,7 @@ function MenuList({ onClick }) {
                 {user?.jobTitle ?? user?.email}
               </span>
             </div>
- 
+
             <img
               src={user?.profileUrl || NoProfile}
               alt="user profile"
@@ -117,9 +114,14 @@ function MenuList({ onClick }) {
 const Navbar = () => {
   const { user } = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false); // State to manage SignUp modal visibility
 
   const handleCloseNavbar = () => {
     setIsOpen((prev) => !prev);
+  };
+
+  const handleSignInClick = () => {
+    setIsSignUpOpen(true); // Open the SignUp modal
   };
 
   return (
@@ -139,24 +141,31 @@ const Navbar = () => {
             <li>
               <Link to="/companies">Companies</Link>
             </li>
-        
-              <li>
-                <Link to={user?.accountType==="Seeker"?"/applications":"/upload-job"}>{user?.accountType ==="seeker" ?"Applications":"Upload Job"}</Link>
-              </li>
-        
+
             <li>
-              <Link to="/about-us">About</Link>
+              <Link
+                to={
+                  user?.accountType === "Seeker"
+                    ? "/applications"
+                    : "/upload-job"
+                }
+              >
+                {user?.accountType === "seeker" ? "Applications" : "Upload Job"}
+              </Link>
             </li>
+
+            {/* <li>
+              <Link to="/about-us">About</Link>
+            </li> */}
           </ul>
 
           <div className="hidden lg:block">
             {!user?.token ? (
-              <Link to="/user-auth">
-                <CustomButton
-                  title="Sign In"
-                  containerStyles="text-blue-600 py-1.5 px-5 focus:outline-none hover:bg-blue-700 hover:text-white rounded-full text-base border border-blue-600"
-                />
-              </Link>
+              <CustomButton
+                title="Sign In"
+                containerStyles="text-blue-600 py-1.5 px-5 focus:outline-none hover:bg-blue-700 hover:text-white rounded-full text-base border border-blue-600"
+                onClick={handleSignInClick} // Open SignUp modal on click
+              />
             ) : (
               <div>
                 <MenuList onClick={handleCloseNavbar} />
@@ -190,18 +199,17 @@ const Navbar = () => {
           >
             {user?.accountType === "seeker" ? "Applications" : "Upload Job"}
           </Link>
-          <Link to="/about-us" onClick={handleCloseNavbar}>
+          {/* <Link to="/about-us" onClick={handleCloseNavbar}>
             About
-          </Link>
+          </Link> */}
 
           <div className="w-full py-10">
             {!user?.token ? (
-              <a href="/user-auth">
-                <CustomButton
-                  title="Sign In"
-                  containerStyles="text-blue-600 py-1.5 px-5 focus:outline-none hover:bg-blue-700 hover:text-white rounded-full text-base border border-blue-600"
-                />
-              </a>
+              <CustomButton
+                title="Sign In"
+                containerStyles="text-blue-600 py-1.5 px-5 focus:outline-none hover:bg-blue-700 hover:text-white rounded-full text-base border border-blue-600"
+                onClick={handleSignInClick} // Open SignUp modal on click
+              />
             ) : (
               <div>
                 <MenuList onClick={handleCloseNavbar} />
@@ -210,6 +218,9 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* SignUp Modal */}
+      <SignUp open={isSignUpOpen} setOpen={setIsSignUpOpen} />
     </>
   );
 };
