@@ -11,17 +11,20 @@ const JobCard = ({ job }) => {
                 rounded-md px-3 py-5 "
       >
         <div className="flex gap-3">
-          <img
-            src={job?.logo}
-            alt={job?.name}
-            className="w-14 h-14"
-          />
+          <img src={job?.logo} alt={job?.name} className="w-12 h-12" />
 
           <div className="">
-            <p className="text-lg font-semibold truncate">{job?.jobTitle}</p>
+            <p
+              className="text-lg font-semibold truncate "
+              title={job?.jobTitle.length > 20 ? job?.jobTitle : ""}
+            >
+              {job?.jobTitle.length > 20
+                ? job?.jobTitle.slice(0, 20) + "..."
+                : job?.jobTitle}
+            </p>
             <span className="flex gap-2 items-center">
               <GoLocation className="text-slate-900 text-sm" />
-              {job?.location}
+              {job?.location} 
             </span>
           </div>
         </div>
