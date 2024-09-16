@@ -11,7 +11,8 @@ import NotFound from "./NotFound";
 import ForgotPassword from "./ForgotPassword";  
 import ResetPassword from "./ResetPassword";
 import ForgotPasswordCompany from "./ForgotPasswordCompany"; 
-import ResetPasswordCompany from "./ResetPasswordCompany";
+import ResetPasswordCompany from "./ResetPasswordCompany"; 
+import Editjob from "./Editjob"
 
 export {
   About,
@@ -26,5 +27,6 @@ export {
   ForgotPassword, 
   ResetPassword,
   ForgotPasswordCompany,
-  ResetPasswordCompany
+  ResetPasswordCompany, 
+  Editjob
 };

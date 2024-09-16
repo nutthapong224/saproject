@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Linkedin } from "../assets";
 import moment from "moment";
 import { AiOutlineSafetyCertificate } from "react-icons/ai";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { jobs } from "../utills/data";
 import { CustomButton, JobCard, Loading } from "../components";
 import { useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import { apiRequest } from "../utills";
 
 const JobDetail = () => {
   const { id } = useParams();
-
+  const navigate = useNavigate(); // Initialize navigate
   const { user } = useSelector((state) => state.user);
   const [job, setJob] = useState(null);
   const [similarJobs, setSimilarJobs] = useState([]);
@@ -34,29 +34,31 @@ const JobDetail = () => {
     }
   };
 
- const handleDeletePost = async () => {
+  const handleDeletePost = async () => {
+    if (window.confirm("Delete Job Post")) {
+      try {
+        const res = await apiRequest({
+          url: `/jobs/delete-job/${job?._id}`,
+          token: user?.token,
 
-   if (window.confirm("Delete Job Post")) {
-     try {
-       const res = await apiRequest( {
-        url: `/jobs/delete-job/${job?._id}`,
-        token: user?.token,
-       
-         method:"DELETE"
-      } );
-       if (res?.success) {
-         alert(res?.message);
-         window.location.replace("/");
-       }  
-          setIsFetching(false);
-     } catch (error) { 
-         setIsFetching(false);
-       console.error("Error deleting job post:", error);
-       alert("An error occurred while deleting the job post");
-     }
-   }
-  
- };
+          method: "DELETE",
+        });
+        if (res?.success) {
+          alert(res?.message);
+          window.location.replace("/");
+        }
+        setIsFetching(false);
+      } catch (error) {
+        setIsFetching(false);
+        console.error("Error deleting job post:", error);
+        alert("An error occurred while deleting the job post");
+      }
+    }
+  };
+const handleEditjob = () => {
+  navigate(`/edit-job/${id}`); // Navigate to the edit-job path with the job id
+};
+
   useEffect(() => {
     id && getJobDetails();
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -185,7 +187,7 @@ const JobDetail = () => {
             {user?._id === job?.company?._id ? (
               <CustomButton
                 title="Edit Post"
-                onClick={handleDeletePost}
+                onClick={handleEditjob}
                 containerStyles="w-full flex items-center justify-center text-white bg-green-500 py-3 px-5 outline-none rounded-full text-base mb-5"
               />
             ) : (

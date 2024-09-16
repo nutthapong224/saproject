@@ -1,4 +1,4 @@
-// src/App.jsx 
+// src/App.jsx
 
 import { Outlet, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import {
@@ -9,18 +9,17 @@ import {
   Findjobs,
   JobDetail,
   Uploadjob,
-  UserProfile,  
-  NotFound, 
-  ForgotPassword, 
-  ResetPassword, 
+  UserProfile,
+  NotFound,
+  ForgotPassword,
+  ResetPassword,
   ForgotPasswordCompany,
-  ResetPasswordCompany
-  
+  ResetPasswordCompany,
+  Editjob,
 } from "./pages";
- 
-import {Footer,Navbar} from './components'
-import { useSelector } from "react-redux";
 
+import { Footer, Navbar } from "./components";
+import { useSelector } from "react-redux";
 
 function Layout() {
   const { user } = useSelector((state) => state.user);
@@ -60,6 +59,7 @@ function App() {
           <Route path={"/company-profile"} element={<Companyprofile />} />
           <Route path={"/company-profile/:id"} element={<Companyprofile />} />
           <Route path={"/upload-job"} element={<Uploadjob />} />
+          <Route path={"/edit-job/:id"} element={<Editjob />} />
           <Route path={"/job-detail/:id"} element={<JobDetail />} />
         </Route>
 

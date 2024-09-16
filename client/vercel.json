@@ -13,6 +13,7 @@
     { "src": "/company-profile/:id", "dest": "/" },
     { "src": "/upload-job", "dest": "/" },
     { "src": "/job-detail/:id", "dest": "/" },
+    { "src": "/edit-job/:id", "dest": "/" },
     { "src": "/about-us", "dest": "/" },
     { "src": "/user-auth", "dest": "/" },
     { "src": "/", "dest": "/" },
