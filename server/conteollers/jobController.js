@@ -68,6 +68,11 @@ export const createJob = async (req, res, next) => {
 
 export const updateJob = async (req, res, next) => {
   try {
+    // Extract jobId from request parameters
+    const { jobId } = req.params;
+    console.log("Received Job ID:", jobId); // Debugging line
+
+    // Validate and extract other fields from request body
     const {
       jobTitle,
       jobType,
@@ -78,7 +83,6 @@ export const updateJob = async (req, res, next) => {
       desc,
       requirements,
     } = req.body;
-    const { jobId } = req.params;
 
     if (
       !jobTitle ||
@@ -88,37 +92,49 @@ export const updateJob = async (req, res, next) => {
       !requirements ||
       !desc
     ) {
-      next("Please Provide All required Fields");
-      return;
+      return next("Please Provide All Required Fields");
     }
-    const id = req.body.user.userId;
 
-    if (!mongoose.Types.ObjectId.isValid(id))
-      return res.status(404).send(`No company with id : ${id}`);
-    const jobPost = {
-      jobTitle,
-      jobType,
-      location,
-      salary,
-      vacancies,
-      experience,
-      detail: { desc, requirements },
+    // Check if the jobId is valid
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
+      return res.status(404).send(`No job with id : ${jobId}`);
+    }
 
-      _id: jobId,
-    };
-    await Jobs.findByIdAndUpdate(jobId, jobPost, {
-      new: true,
-    });
+    // Check if the job exists before updating
+    const existingJob = await Jobs.findById(jobId);
+    if (!existingJob) {
+      return res.status(404).json({ message: "Job Post Not Found" });
+    }
+
+    // Update the job post
+    const updatedJob = await Jobs.findByIdAndUpdate(
+      jobId,
+      {
+        jobTitle,
+        jobType,
+        location,
+        salary,
+        vacancies,
+        experience,
+        detail: { desc, requirements },
+      },
+      { new: true } // Return the updated document
+    );
+
     res.status(200).json({
       success: true,
-      message: "Job Posted Successfully",
-      jobPost,
+      message: "Job Updated Successfully",
+      jobPost: updatedJob,
     });
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
+
+
+
+
 
 export const getJobPosts = async (req, res, next) => {
   try {

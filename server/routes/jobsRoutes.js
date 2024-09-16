@@ -15,7 +15,9 @@ router.post("/upload-job", userAuth, createJob);
 
 //IPDATE JOB
 
-router.put("/update-job/:jobid", userAuth, updateJob);
+// Ensure this route matches the parameter name used in the controller
+router.put("/update-job/:jobId", userAuth, updateJob);
+
 //GET JOB POST
 
 router.get("/find-jobs", getJobPosts);
