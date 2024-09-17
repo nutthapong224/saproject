@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CompanyCard, CustomButton, Header, ListBox, Loading } from "../components";
-import { companies } from "../utills/data";
+import {
+  CompanyCard,
+  CustomButton,
+  Header,
+  ListBox,
+  Loading,
+} from "../components";
 import { apiRequest, updateURL } from "../utills";
 
 const Companies = () => {
   const [page, setPage] = useState(1);
   const [numPage, setNumPage] = useState(1);
   const [recordsCount, setRecordsCount] = useState(0);
-  const [data, setData] = useState(companies ?? []);
+  const [data, setData] = useState([]); // Initialize empty array for fetched data
   const [searchQuery, setSearchQuery] = useState("");
   const [cmpLocation, setCmpLocation] = useState("");
   const [sort, setSort] = useState("Newest");
@@ -16,6 +21,7 @@ const Companies = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+
   const fetchCompanies = async () => {
     setIsFetching(true);
 
@@ -28,7 +34,7 @@ const Companies = () => {
       location: location,
     });
 
-    console.log("Fetching data from URL:", newURL); // Add logging to check the URL
+    console.log("Fetching data from URL:", newURL);
 
     try {
       const res = await apiRequest({
@@ -40,28 +46,30 @@ const Companies = () => {
 
       if (res) {
         setNumPage(res.numOfPage || 1);
-        setRecordsCount(res.total || 0); // Use default values if properties are undefined
-        setData(res.data || []); // Use default values if properties are undefined
+        setRecordsCount(res.total || 0);
+        setData(res.data || []); // Fetch only the data from the API
       }
 
       setIsFetching(false);
     } catch (e) {
-      console.log("Error fetching data:", e); // Add logging to check for errors
-      setIsFetching(false); // Ensure isFetching is set to false even in case of an error
+      console.log("Error fetching data:", e);
+      setIsFetching(false);
     }
   };
 
   const handleSearchSubmit = async (e) => {
-
-    e.preventDefault(); 
-    await fetchCompanies(); 
-
+    e.preventDefault();
+    await fetchCompanies();
   };
-  const handleShowMore = () => {};
+
+  const handleShowMore = () => {
+    setPage((prevPage) => prevPage + 1); // Load more data by increasing page number
+  };
 
   useEffect(() => {
     fetchCompanies();
-  }, [page, sort]); 
+  }, [page, sort]);
+
   return (
     <div className="w-full">
       <Header
@@ -72,7 +80,7 @@ const Companies = () => {
         location={cmpLocation}
         setLocation={setCmpLocation}
       />
-      <div className="container mx-auto flex flex-col gap-5 2xl:gap-10 px-5  py-6 bg-[#f7fdfd]">
+      <div className="container mx-auto flex flex-col gap-5 2xl:gap-10 px-5 py-6 bg-[#f7fdfd]">
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm md:text-base">
             Showing: <span className="font-semibold">{recordsCount}</span>{" "}
@@ -81,13 +89,12 @@ const Companies = () => {
 
           <div className="flex flex-col md:flex-row gap-0 md:gap-2 md:items-center">
             <p className="text-sm md:text-base">Sort By:</p>
-
             <ListBox sort={sort} setSort={setSort} />
           </div>
         </div>
 
         <div className="w-full flex flex-col gap-6">
-          {data?.map((cmp, index) => (
+          {data.map((cmp, index) => (
             <CompanyCard cmp={cmp} key={index} />
           ))}
 
@@ -98,7 +105,7 @@ const Companies = () => {
           )}
 
           <p className="text-sm text-right">
-            {data?.length} records out of {recordsCount}
+            {data.length} records out of {recordsCount}
           </p>
         </div>
 
@@ -115,4 +122,5 @@ const Companies = () => {
     </div>
   );
 };
+
 export default Companies;
