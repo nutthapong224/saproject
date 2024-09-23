@@ -1,6 +1,6 @@
 import axios from "axios";
-const API_URL = "https://saproject.onrender.com/api-v1/"; 
-// const API_URL = "http://localhost:8080/api-v1/";
+const API_URL = process.env.API_URL;
+
 
 export const API = axios.create({
   baseURL: API_URL,
