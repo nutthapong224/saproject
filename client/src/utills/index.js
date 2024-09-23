@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL; 
+const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
+
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -39,10 +41,7 @@ export const handleFileUpload = async (uploadFile) => {
   formData.append("upload_preset", "jobfinder");
 
   try {
-    const response = await axios.post(
-      "https://api.cloudinary.com/v1_1/dnohgikvp/image/upload",
-      formData
-    );
+    const response = await axios.post(CLOUDINARY_URL, formData);
     return response.data.secure_url;
   } catch (error) {
     console.log(error);
