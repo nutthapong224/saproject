@@ -146,17 +146,14 @@ const Navbar = () => {
               <Link
                 to={
                   user?.accountType === "Seeker"
-                    ? "/applications"
+                    ? <></>
                     : "/upload-job"
                 }
               >
-                {user?.accountType === "seeker" ? "Applications" : "Upload Job"}
+                {user?.accountType === "seeker" ? <></> : "Upload Job"}
               </Link>
             </li>
 
-            {/* <li>
-              <Link to="/about-us">About</Link>
-            </li> */}
           </ul>
 
           <div className="hidden lg:block">
